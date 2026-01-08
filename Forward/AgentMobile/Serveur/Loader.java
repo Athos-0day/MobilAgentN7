@@ -1,4 +1,6 @@
+package Serveur;
 import java.util.*;
+
 public class Loader extends ClassLoader {
     private final Map<String, byte[]> classes = new HashMap<>();
     public void addClass(String name, byte[] bytes) {

@@ -1,3 +1,5 @@
+package Serveur;
+import Common.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -35,30 +37,15 @@ public class DatabaseServiceImpl extends UnicastRemoteObject implements Database
     //Méthode pour récupérer les restaurants dans une ville
     @Override 
     public List<String> getRestaurantParVille(String ville) throws RemoteException {
+        System.out.println("Serveur : Consultation des restaurants pour " + ville);
         return restaurantData.getOrDefault(ville, new ArrayList<>());
     }
 
     //Méthode pour récupérer le numéro de téléphone associé à un restaurant
     @Override
     public String getNumeroParRestaurant(String restaurant) throws RemoteException {
+        System.out.println("Serveur : Consultation annuaire pour " + restaurant);
         return numeroData.getOrDefault(restaurant, "Numéro non trouvé");
     }
 
-    public static void main(String args[]) {
-        try {
-            // Création du registre sur le port 8081
-            LocateRegistry.createRegistry(8081);
-            
-            // Instanciation du service
-            DatabaseServiceImpl service = new DatabaseServiceImpl();
-            
-            // Enregistrement du service
-            Naming.rebind("//localhost:8081/DatabaseService", service);
-            
-            System.out.println("Serveur RMI Database prêt sur le port 8081...");
-        } catch (Exception e) {
-            System.err.println("Erreur Serveur : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }

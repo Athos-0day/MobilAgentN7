@@ -1,29 +1,65 @@
-import java.io.*;
-import java.net.*;
+package Client;
+import Serveur.AgentServer;
 import java.nio.file.*;
+import java.io.*;
+import java.net.Socket;
 
 public class AgentClient {
     public static void main(String[] args) {
+        String ville = "Toulouse";
+        String host = "localhost";
+        int portA = 8081; 
+        int portB = 8082; 
+        int portClient = 9999;
+
+        // Lecture des arguments (optionnel)
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--ville") && i+1 < args.length) ville = args[i+1];
+        }
+
+        System.out.println("SCENARIO FORWARD : Client -> ServA -> ServB -> Client");
+        System.out.println("Recherche pour : " + ville);
+
         try {
-            ForwardAgent agent = new ForwardAgent("Paris");
-            Socket s = new Socket("localhost", 9000);
-            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+            // 1. Lancer le serveur de retour sur le client
+            new Thread(() -> new AgentServer(portClient, null).start()).start();
+            Thread.sleep(1000); // Pause technique
 
-            // Envoi du nom et du bytecode
-            String name = agent.getClass().getName();
-            byte[] code = Files.readAllBytes(Paths.get(name + ".class"));
-            
-            dos.writeUTF(name);
-            dos.writeInt(code.length);
-            dos.write(code);
+            // 2. Charger le bytecode de l'agent
+            // ATTENTION : Compilez d'abord pour avoir le .class !
+            String classPath = "Client/ForwardAgent.class";
+            byte[] code = Files.readAllBytes(Paths.get(classPath));
 
-            // Envoi de l'objet agent
-            ObjectOutputStream oos = new ObjectOutputStream(dos);
-            oos.writeObject(agent);
-            oos.flush();
+            // 3. Instancier l'agent
+            ForwardAgent agent = new ForwardAgent(ville, host, portA, portB, portClient, code);
+
+            // 4. PREMIER ENVOI (Même protocole robuste que move())
+            System.out.println("Envoi initial vers Serveur A (" + portA + ")...");
             
-            System.out.println("Agent envoyé !");
-            s.close();
-        } catch (Exception e) { e.printStackTrace(); }
+            try (Socket s = new Socket(host, portA)) {
+                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+                // A. Sérialisation tampon
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(bos);
+                oos.writeObject(agent);
+                oos.flush();
+                byte[] agentBytes = bos.toByteArray();
+
+                // B. Envoi paquet
+                dos.writeUTF(agent.getClass().getName());
+                dos.writeInt(code.length);
+                dos.write(code);
+                dos.writeInt(agentBytes.length);
+                dos.write(agentBytes);
+                dos.flush();
+            }
+            
+            System.out.println("Agent parti ! Attente du retour...");
+
+        } catch (Exception e) {
+            System.err.println("Erreur Client : " + e);
+            e.printStackTrace();
+        }
     }
 }
