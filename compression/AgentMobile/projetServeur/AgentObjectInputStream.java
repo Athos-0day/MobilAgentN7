@@ -1,5 +1,5 @@
 import java.io.*;
-import java.lang.reflect.*;
+import java.io.ObjectStreamClass;
 
 public class AgentObjectInputStream extends ObjectInputStream {
 
@@ -16,11 +16,14 @@ public class AgentObjectInputStream extends ObjectInputStream {
             throws IOException, ClassNotFoundException {
 
         String name = desc.getName();
-        try {
-            return Class.forName(name, false, loader);
-        } catch (ClassNotFoundException e) {
-            return super.resolveClass(desc);
+
+        // ⚡ Si c'est une classe d'agent, charger via le ClassLoader dynamique
+        if (name.equals("AgentCompression")) {
+            return loader.loadClass(name);
         }
+
+        // ⚡ Sinon (interface commune ou java.*), déléguer au parent
+        return super.resolveClass(desc);
     }
 }
 
