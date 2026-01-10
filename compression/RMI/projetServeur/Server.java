@@ -15,10 +15,12 @@ public final class Server {
 
   public static void main(String args[]) {
   try {
-    /* Launching the naming service – rmiregistry – within the JVM */
-    LocateRegistry.createRegistry(8081);
-    Naming.bind(serverURI, new ServiceFichierImpl());
+    // /* Launching the naming service – rmiregistry – within the JVM */
+    // LocateRegistry.createRegistry(8081);
+    // Naming.bind(serverURI, new ServiceFichierImpl());
 
+    // On enregistre l'objet distant dans le registre existant
+    Naming.rebind(serverURI, new ServiceFichierImpl());
     while(true);   
 //     Naming.bind(serverURI + "/Pad/" + new PadImpl);
 
