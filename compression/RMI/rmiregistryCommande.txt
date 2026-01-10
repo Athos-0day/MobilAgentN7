@@ -1,0 +1,2 @@
+ export CLASSPATH=$CLASSPATH:/home/louis/Documents/ecole/n7/2A/MobilAgentN7/compression/RMI/projetServeur (ou le chemin vers les classes)
+ rmiregistry port
