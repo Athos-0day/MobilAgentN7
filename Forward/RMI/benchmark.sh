@@ -2,7 +2,7 @@
 
 # --- CONFIGURATION ---
 # Ici on utilise un seul host car ton test manuel montre un seul flag --ip
-HOST="localhost"
+HOST="147.127.133.131"
 VILLES=("Toulouse" "Paris" "Bordeaux")
 NB_REQUETES=100
 LOG_FILE="resultats_rmi.csv"
