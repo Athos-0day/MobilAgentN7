@@ -17,12 +17,12 @@ public class AgentObjectInputStream extends ObjectInputStream {
 
         String name = desc.getName();
 
-        // ⚡ Si c'est une classe d'agent, charger via le ClassLoader dynamique
+        // si c'est une classe d'agent, on charge via le ClassLoader dynamique
         if (name.equals("AgentCompression")) {
             return loader.loadClass(name);
         }
 
-        // ⚡ Sinon (interface commune ou java.*), déléguer au parent
+        // Sinon on délégue au parent qui cherche dans les .class
         return super.resolveClass(desc);
     }
 }
