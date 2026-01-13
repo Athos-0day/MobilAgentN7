@@ -3,12 +3,12 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 /**
- * Class for the RMI server that starts the registry and create the pads
+ * Class for the RMI server that connects to the RMI registry and binds the remote object
  *
  * @author you
  */
 public final class Server {
-
+  // modifier l'ip et le port si besoin
   public static final String serverURI = "//localhost:8081/ServiceFichier";
 
 
@@ -19,11 +19,9 @@ public final class Server {
     // LocateRegistry.createRegistry(8081);
     // Naming.bind(serverURI, new ServiceFichierImpl());
 
-    // On enregistre l'objet distant dans le registre existant
+    // On enregistre l'objet distant dans le registre existant, il faut avoir lancé le rmi avant
     Naming.rebind(serverURI, new ServiceFichierImpl());
     while(true);   
-//     Naming.bind(serverURI + "/Pad/" + new PadImpl);
-
         } catch (Exception e) {
     e.printStackTrace();
   }
