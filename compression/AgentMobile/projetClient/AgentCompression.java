@@ -20,6 +20,7 @@ public class AgentCompression implements AgentMobile {
             ZipOutputStream zos = new ZipOutputStream(baos);
 
             ZipEntry entry = new ZipEntry(nom);
+            // ajout de l'entrée dans le zip
             zos.putNextEntry(entry);
             zos.write(fichier);
             zos.closeEntry();

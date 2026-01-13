@@ -1,8 +1,9 @@
 import java.util.*;
 
 public class AgentClassLoader extends ClassLoader {
+    // Map pour stocker les classes chargées dynamiquement
     private final Map<String, byte[]> classes = new HashMap<>();
-
+    // ajout d'une classe
     public void addClass(String name, byte[] bytes) {
         classes.put(name, bytes);
     }
@@ -14,7 +15,6 @@ public class AgentClassLoader extends ClassLoader {
             // On définit la classe seulement si on a le bytecode
             return defineClass(name, bytes, 0, bytes.length);
         }
-        // Sinon on laisse le parent (système) chercher
         throw new ClassNotFoundException(name);
     }
 }

@@ -1,10 +1,10 @@
 import java.io.*;
 import java.io.ObjectStreamClass;
-
+// cette classe permet de désérialiser des objets en utilisant un ClassLoader spécifique pour les classes d'agents
 public class AgentObjectInputStream extends ObjectInputStream {
 
     private final ClassLoader loader;
-
+// constructeur qui prend un InputStream et un ClassLoader
     public AgentObjectInputStream(InputStream in, ClassLoader loader)
             throws IOException {
         super(in);
