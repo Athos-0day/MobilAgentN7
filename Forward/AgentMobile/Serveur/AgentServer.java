@@ -30,7 +30,7 @@ public class AgentServer {
                 Socket socket = serverSocket.accept();
                 String remoteIp = socket.getInetAddress().getHostAddress();
                 
-                // MULTITHREADING : Chaque agent est traité dans un thread séparé
+                // Chaque agent est traité dans un thread séparé
                 // pour ne pas bloquer l'arrivée d'autres agents.
                 new Thread(() -> handleAgent(socket, remoteIp)).start();
             }
@@ -40,22 +40,22 @@ public class AgentServer {
     }
 
     /**
-     * Méthode de "désérialisation dynamique".
+     * Méthode de désérialisation dynamique.
      * C'est ici que l'agent est reconstruit 
      */
     private void handleAgent(Socket socket, String remoteIp) {
         try (DataInputStream dis = new DataInputStream(socket.getInputStream())) {
             
-            // RÉCEPTION DES COMPOSANTS (PROTOCOLE)
+            // RÉCEPTION DES COMPOSANTS 
             // On lit dans l'ordre exact défini dans Agent.move()
-            String className = dis.readUTF(); // 1. Nom de la classe
+            String className = dis.readUTF(); // Nom de la classe
             
             int codeLen = dis.readInt();
-            byte[] bytecode = new byte[codeLen]; // 2. Le code binaire (.class)
+            byte[] bytecode = new byte[codeLen]; // Le code binaire (.class)
             dis.readFully(bytecode);
 
             int agentLen = dis.readInt();
-            byte[] agentBytes = new byte[agentLen]; // 3. L'état (les données)
+            byte[] agentBytes = new byte[agentLen]; // L'état (les données)
             dis.readFully(agentBytes);
 
             // RECONSTRUCTION DE L'AGENT

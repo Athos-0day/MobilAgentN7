@@ -16,7 +16,7 @@ public class AgentClient {
         int portB = 8082; 
         int portClient = 9999;
 
-        // --- GESTION DES ARGUMENTS ---
+        // gestion des arguments 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--ville": if (i+1 < args.length) ville = args[i+1]; break;
@@ -37,21 +37,20 @@ public class AgentClient {
         System.out.println("=================================");
 
         try {
-            // 1. Lancer le serveur de retour localement (sur cette machine)
-            // On écoute sur toutes les interfaces, mais l'agent devra viser 'ipClient' pour revenir
+            // Lancer le serveur de retour localement (sur cette machine)
             final int fixedPortClient = portClient;
 
             new Thread(() -> new AgentServer(fixedPortClient, null).start()).start();
             Thread.sleep(1000);
 
-            // 2. Charger le bytecode de l'agent
+            // Charger le bytecode de l'agent
             String classPath = "Client/ForwardAgent.class";
             byte[] code = Files.readAllBytes(Paths.get(classPath));
 
-            // 3. Instancier l'agent avec l'itinéraire complet (IPs et Ports)
+            // Instancier l'agent avec l'itinéraire complet (IPs et Ports)
             ForwardAgent agent = new ForwardAgent(ville, ipA, portA, ipB, portB, ipClient, portClient, code);
 
-            // 4. PREMIER ENVOI VERS SERVEUR A
+            // PREMIER ENVOI VERS SERVEUR A
             System.out.println("\nDépart de l'agent vers Serveur A...");
             
             try (Socket s = new Socket(ipA, portA)) {
