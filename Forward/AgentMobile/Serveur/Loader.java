@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  * Le Loader est un ClassLoader personnalisé.
- * Son rôle est de permettre au JVM du serveur de "comprendre" et d'instancier 
+ * Son rôle est de permettre au JVM d'instancier 
  * une classe (l'Agent) dont il ne possède pas le fichier .class localement.
  */
 public class Loader extends ClassLoader {

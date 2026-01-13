@@ -42,7 +42,7 @@ public class ForwardAgent extends Agent {
             DatabaseServiceRem db = (DatabaseServiceRem) localService;
 
             if (etape == 1) {
-                // --- ÉTAPE 1 : SUR SERVEUR A ---
+                // étape: SUR SERVEUR 
                 System.out.println("Agent: Recherche restaurants à " + villeCible + " sur Serveur A");
                 restosTrouves = db.getRestaurantParVille(villeCible);
                 
@@ -50,7 +50,7 @@ public class ForwardAgent extends Agent {
                 this.move(ipB, portB); // Saut vers l'IP spécifique de B
 
             } else if (etape == 2) {
-                // --- ÉTAPE 2 : SUR SERVEUR B ---
+                // étape 2 : SUR SERVEUR B
                 System.out.println("Agent: Recherche numéros sur Serveur B");
                 if (restosTrouves != null) {
                     for (String r : restosTrouves) {
@@ -61,7 +61,7 @@ public class ForwardAgent extends Agent {
                 this.move(ipClient, portClient); // Retour vers l'IP du Client
 
             } else if (etape == 3) {
-                // --- ÉTAPE 3 : RETOUR SUR LE PC CLIENT ---
+                //étape 3 : RETOUR SUR LE PC CLIENT
                 long duree = (System.nanoTime() - startTime) / 1000000;
                 System.out.println("\n" + "=".repeat(40));
                 System.out.println("MISSION TERMINÉE EN " + duree + " ms");

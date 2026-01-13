@@ -68,7 +68,7 @@ public abstract class Agent implements Serializable {
             System.out.println(">>> Agent : Migration réussie vers " + destHost);
             
         } catch (Exception e) {
-            System.err.println("CRITICAL : Échec de la migration vers " + destHost + " : " + e.getMessage());
+            System.err.println("Erreur critique : Échec de la migration vers " + destHost + " : " + e.getMessage());
         }
     }
 }
